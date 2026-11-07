@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
 import { taskCard } from './components/taskCard'
+import { addTaskFolmular } from './components/formularCard';
 
 export type Task = {
   id: number;
@@ -12,18 +10,16 @@ export type Task = {
   completed: boolean;
 };
 
+const keys = ['name', 'subject'] as const;
+
 let allTasks: Task[] = [
   {id: 0, name: "cvicenie 40/2", subject: "Matematika", completed: true},
   {id: 1, name: "vytvorit hru piskvorky", subject: "Programovanie", completed: false},
   {id: 2, name: "naucit sa deje", subject: "Dejepis", completed: false}
 ];
-
-// export function taskButtonPress(task: Task) {
-//   task.completed = !task.completed;
-// }
+let idCounter: number = allTasks.length;
 
 function App() {
-  const [count, setCount] = useState(0)
   const [tasks, setTasks] = useState<Task[]>(allTasks);
   
   const taskButtonPress = (id: number) => {
@@ -34,12 +30,32 @@ function App() {
     );
   };
 
+  const addTask = (data: {[k: string]: string}) => {
+
+    if (Object.values(data).some((value) => typeof value === "string" && value.trim() === "")) {
+      alert("Fill out all fields please");
+      return;
+    }
+    const newTask: Task = {
+      id: idCounter,
+      completed: false,
+      ...data,
+    };
+    idCounter += 1;
+    setTasks(prev => [...prev, newTask]);
+  };
+
   return (
     <>
       <div>
           {tasks.map((task) => (
             taskCard(task, taskButtonPress)
           ))}
+      </div>
+      <br/><br/>
+      <div>
+        <h1>formular</h1>
+        {addTaskFolmular(addTask, keys)}
       </div>
     </>
   )
