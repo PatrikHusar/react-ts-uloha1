@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { taskCard } from './components/taskCard'
-import { addTaskFolmular } from './components/formularCard';
+import { AddTaskForm } from './components/formularCard';
 
 export type Task = {
   id: number;
@@ -9,8 +9,6 @@ export type Task = {
   subject: string;
   completed: boolean;
 };
-
-const keys = ['name', 'subject'] as const;
 
 let allTasks: Task[] = [
   {id: 0, name: "cvicenie 40/2", subject: "Mat", completed: true},
@@ -106,7 +104,7 @@ function App() {
       <br/><br/>
       <div>
         <h1>formular</h1>
-        {addTaskFolmular(addTask, keys)}
+        {AddTaskForm(addTask)}
       </div>
     </>
   )
