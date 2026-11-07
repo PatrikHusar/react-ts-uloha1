@@ -13,22 +13,27 @@ export type Task = {
 const keys = ['name', 'subject'] as const;
 
 let allTasks: Task[] = [
-  {id: 0, name: "cvicenie 40/2", subject: "Matematika", completed: true},
-  {id: 1, name: "vytvorit hru piskvorky", subject: "Programovanie", completed: false},
-  {id: 2, name: "naucit sa deje", subject: "Dejepis", completed: false}
+  {id: 0, name: "cvicenie 40/2", subject: "Mat", completed: true},
+  {id: 1, name: "vytvorit hru piskvorky", subject: "Pro", completed: false},
+  {id: 2, name: "naucit sa deje", subject: "Dej", completed: false}
 ];
 let idCounter: number = allTasks.length;
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>(allTasks);
+  const [filter, setFilter] = useState<"all" | "completed" | "uncompleted">("all");
   
-  const taskComplete = (id: number) => {
+  const taskCompletedPress = (id: number) => {
     setTasks(prev =>
       prev.map(task =>
         task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
   };
+
+  const deleteCompletedTasks = () => {
+    setTasks((prev) => prev.filter((task) => task.completed === false))
+  }
 
   const addTask = (data: {[k: string]: string}) => {
 
@@ -49,25 +54,40 @@ function App() {
     setTasks(prev => prev.filter((task) => task.id !== id));
   };
 
+  const filterTasks = () => {
+    return tasks.filter((task) => {
+      if (filter === "all") return true
+      if (filter === "completed") return task.completed
+      if (filter === "uncompleted") return !task.completed
+    })
+  }
+
   const renderTasks = () => {
-    if (tasks.length === 0) {
+    const filteredTasks = filterTasks();
+    if (filteredTasks.length === 0) {
       return <p>No tasks</p>;
     }
 
     const areAllCompleted = tasks.every((task) => task.completed);
-    if (areAllCompleted) {
-      return <p>All tasks completed</p>;
-    }
 
-    return tasks.map((task) => (
-      taskCard(task, taskComplete, removeTask)
-    ));
+    return (
+      <>
+        {(areAllCompleted) && <p>All tasks completed</p>}
+        {filteredTasks.map((task) => (
+          taskCard(task, taskCompletedPress, removeTask)
+        ))}
+      </>
+    );
   }
 
   return (
     <>
       <div>
         <h1>Tasks</h1>
+        <button onClick={() => setFilter("all")}>All</button>
+        <button onClick={() => setFilter("completed")}>Completed</button>
+        <button onClick={() => setFilter("uncompleted")}>Uncompleted</button>
+        <button onClick={() => deleteCompletedTasks()} >remove completed tasks</button>
         {renderTasks()}
       </div>
       <br/><br/>
