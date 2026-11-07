@@ -49,13 +49,26 @@ function App() {
     setTasks(prev => prev.filter((task) => task.id !== id));
   };
 
+  const renderTasks = () => {
+    if (tasks.length === 0) {
+      return <p>No tasks</p>;
+    }
+
+    const areAllCompleted = tasks.every((task) => task.completed);
+    if (areAllCompleted) {
+      return <p>All tasks completed</p>;
+    }
+
+    return tasks.map((task) => (
+      taskCard(task, taskComplete, removeTask)
+    ));
+  }
+
   return (
     <>
       <div>
-          {
-            (tasks.length === 0) ? 
-            <p>No tasks</p> :
-            tasks.map((task) => (taskCard(task, taskComplete, removeTask)))}
+        <h1>Tasks</h1>
+        {renderTasks()}
       </div>
       <br/><br/>
       <div>
