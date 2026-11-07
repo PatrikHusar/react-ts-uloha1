@@ -1,6 +1,6 @@
 import type {Task} from '../App';
 
-export const taskCard = (props: Task, onClick: (id: number) => void) => {
+export const taskCard = (props: Task, onClick: (id: number) => void, removeTask: (id: number) => void) => {
   return (
     <div>
       {props.completed ?
@@ -9,6 +9,7 @@ export const taskCard = (props: Task, onClick: (id: number) => void) => {
       <p>predmet: {props.subject}</p>
       <p>completed: {props.completed ? 'true' : 'false'}</p>
       <button onClick={() => onClick(props.id)}>completed</button>
+      <button onClick={() => removeTask(props.id)}>delete</button>
     </div>
   )
 }

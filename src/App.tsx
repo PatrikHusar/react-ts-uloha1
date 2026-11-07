@@ -22,7 +22,7 @@ let idCounter: number = allTasks.length;
 function App() {
   const [tasks, setTasks] = useState<Task[]>(allTasks);
   
-  const taskButtonPress = (id: number) => {
+  const taskComplete = (id: number) => {
     setTasks(prev =>
       prev.map(task =>
         task.id === id ? { ...task, completed: !task.completed } : task
@@ -45,12 +45,17 @@ function App() {
     setTasks(prev => [...prev, newTask]);
   };
 
+  const removeTask = (id: number) => {
+    setTasks(prev => prev.filter((task) => task.id !== id));
+  };
+
   return (
     <>
       <div>
-          {tasks.map((task) => (
-            taskCard(task, taskButtonPress)
-          ))}
+          {
+            (tasks.length === 0) ? 
+            <p>No tasks</p> :
+            tasks.map((task) => (taskCard(task, taskComplete, removeTask)))}
       </div>
       <br/><br/>
       <div>
