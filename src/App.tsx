@@ -62,14 +62,26 @@ function App() {
     })
   }
 
+  const restoreSampleTasks = () => {
+    const newTasks = allTasks.map(
+      (task, i) => ({
+        ...task, id: idCounter + i
+    }));
+    
+    idCounter += newTasks.length;
+
+    setTasks((prev) => [
+      ...prev,
+      ...newTasks
+    ])
+  }
+
   const renderTasks = () => {
     const filteredTasks = filterTasks();
     if (filteredTasks.length === 0) {
       return <p>No tasks</p>;
     }
-
     const areAllCompleted = tasks.every((task) => task.completed);
-
     return (
       <>
         {(areAllCompleted) && <p>All tasks completed</p>}
@@ -88,6 +100,7 @@ function App() {
         <button onClick={() => setFilter("completed")}>Completed</button>
         <button onClick={() => setFilter("uncompleted")}>Uncompleted</button>
         <button onClick={() => deleteCompletedTasks()} >remove completed tasks</button>
+        <button onClick={() => restoreSampleTasks()} >restore sample tasks</button>
         {renderTasks()}
       </div>
       <br/><br/>
